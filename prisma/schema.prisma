@@ -7,17 +7,17 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model User {
+model user {
   id    Int     @id @default(autoincrement())
   email String  @unique
   name  String?
-  selectedCategory categories[]
+  selectedCategory categories[] 
   password String
 }
 
 model categories {
   id        Int      @id @default(autoincrement())
   title     String
-  author    User?    @relation(fields: [authorId], references: [id])
+  author    user?    @relation(fields: [authorId], references: [id])
   authorId  Int?
 }

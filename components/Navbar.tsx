@@ -53,6 +53,13 @@ const Navbar = () => {
           </a>
         </div>
       </div>
+      <div>
+        <div className='bg-gray-300 flex justify-center items-center p-2  text-[0.8rem]'>
+          <p>
+            {'<'} Get 10% off on business sign up {'>'}
+          </p>
+        </div>
+      </div>
     </nav>
   )
 }

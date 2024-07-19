@@ -1,9 +1,15 @@
+import AuthForm from "@/components/AuthForm";
 import Navbar from "@/components/Navbar";
 
 export default function Home() {
   return (
     <main>
-      <Navbar />
+      <header>
+        <Navbar />
+      </header>
+      <section>
+        <AuthForm/>
+      </section>
     </main>
   );
 }
