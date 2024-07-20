@@ -14,31 +14,34 @@ import { Button } from './ui/button'
 import axios from 'axios'
 import { toast } from './ui/use-toast'
 import { useRouter } from 'next/navigation'
+import generateOTP from '@/utils/generateOTP'
 
 export type UserData = {
     email: string;
     name: string;
     password: string;
+    otp: string
 }
 
 const AuthForm = () => {
     const [userExists, setUserExists] = useState(0);
     const [passwordType, setPasswordType] = useState("password");
     const [warning, setWarning] = useState<string>();
+    const [clicked, setClicked] = useState(false);
+
     const [formData, setFormdata] = useState<UserData>({
         email: "",
         name: "",
-        password: ""
+        password: "",
+        otp: ""
     });
     const router = useRouter();
-    useEffect(()=>{
-        const token = localStorage.getItem("token");
-        if(token){
-            router.push("/category")
-        }
+    useEffect(() => {
+
     })
     const RegisterUser = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
+        setClicked(true)
         if (formData.password.length < 8)
             setWarning("Minimum password length should be 8 characters ")
         else {
@@ -48,31 +51,31 @@ const AuthForm = () => {
                     console.log(res.data)
                 }
                 else {
-                    await axios.post("/api/signup", {
+                    const res = await axios.post("/api/signup", {
                         email: formData.email,
                         password: formData.password,
-                        name: formData.name
-                    }).then(res => {
-                        console.log(res.data);
-                        if (res.data.message === "success") {
-                            localStorage.setItem("token",res.data.token)
-                            toast({
-                                title: "User registered Successfully"
-                            })
-                            router.push("/verifyuser")
-                        }
-
-                        else
-                            toast({
-                                title: "User not registered"
-                            })
-                        setFormdata({
-                            email: "",
-                            name: "",
-                            password: ""
+                        name: formData.name,
+                        otp: formData.otp
+                    })
+                    if (res.data.message === "success") {
+                        localStorage.setItem("token", res.data.token)
+                        toast({
+                            title: "User registered Successfully"
                         })
-                    }).catch(err => {
-                        console.log("Error :", err)
+                        router.push(`/verifyuser?email=${formData.email}`)
+                    }
+
+                    else {
+                        toast({
+                            title: "User not registered"
+                        })
+                        setClicked(false)
+                    }
+                    setFormdata({
+                        email: "",
+                        name: "",
+                        password: "",
+                        otp: ""
                     })
                 }
             })
@@ -85,34 +88,37 @@ const AuthForm = () => {
 
     const ValidateUser = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
+        setClicked(true)
         if (formData.password.length < 8) {
             setWarning("Password length should be minimum 8")
         }
         else {
             await axios.get(`/api/checkuser?email=${formData.email}`).then(async (response) => {
                 if (response.data.userExists) {
-                    await axios.post("/api/signin", {
+                    const res = await axios.post("/api/signin", {
                         email: formData.email,
                         password: formData.password
                     })
-                        .then(res => {
-                            console.log(res.data)
-                            if (res.data.auth) {
-                                localStorage.setItem("token",res.data.token)
-                                toast({
-                                    title: "User successfully logged In "
-                                })
-                                router.push("/category")
-                            }
-                            else {
-                                toast({
-                                    title: "User credentials are wrong please enter again "
-                                })
-                            }
+
+                    console.log(res.data)
+                    if (res.data.auth) {
+                        localStorage.setItem("token", res.data.token)
+                        toast({
+                            title: "User successfully logged In "
                         })
+                        router.push("/category")
+                    }
+                    else {
+                        toast({
+                            title: "User credentials are wrong please enter again "
+                        })
+                        setClicked(false)
+                    }
+
                 }
                 else {
                     setWarning("User Don't Exists ")
+                    setClicked(false)
                 }
             })
         }
@@ -186,7 +192,7 @@ const AuthForm = () => {
                                     </p>
                                 </div>
                                 <div>
-                                    <Button type='submit' className='uppercase w-full'>
+                                    <Button type='submit' disabled={clicked} className='uppercase w-full'>
                                         create account
                                     </Button>
                                 </div>
@@ -202,7 +208,8 @@ const AuthForm = () => {
                                     setFormdata({
                                         email: "",
                                         name: "",
-                                        password: ""
+                                        password: "",
+                                        otp: ""
                                     })
                                 }} className='font-extrabold'>
                                     Login
@@ -280,7 +287,7 @@ const AuthForm = () => {
                                 </p>
                             </div>
                             <div>
-                                <Button type='submit' className='uppercase w-full'>
+                                <Button disabled={clicked}  type='submit' className='uppercase w-full'>
                                     login
                                 </Button>
                             </div>
@@ -296,7 +303,8 @@ const AuthForm = () => {
                                 setFormdata({
                                     email: "",
                                     name: "",
-                                    password: ""
+                                    password: "",
+                                    otp: ""
                                 })
                             }} className='font-extrabold'>
                                 SIGN UP

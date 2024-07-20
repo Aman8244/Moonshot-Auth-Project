@@ -13,8 +13,7 @@ model user {
   name  String
   selectedCategory categories[] 
   password String
-  otp String?
-  otpExpiresAt String?
+  otp String?   
   verified Boolean @default(false)
 }
 
