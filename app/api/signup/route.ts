@@ -2,6 +2,7 @@ import prisma from "@/lib/prisma";
 import { NextRequest, NextResponse } from "next/server";
 import { UserData } from "@/components/AuthForm";
 import bcryptjs from "bcryptjs";
+import generateToken from "@/utils/generateToken";
 
 
 export async function POST(req:NextRequest){
@@ -22,10 +23,12 @@ export async function POST(req:NextRequest){
                    email:data.email,
                    password:hash
                 }
-           }).then(res=>{
-                console.log(res)
+           }).then(async(res)=>{
+                const token = await generateToken({email:data.email})
+                console.log(token)
                 return NextResponse.json({
-                    message:"success"
+                    message:"success",
+                    token
                 })
            })
         })

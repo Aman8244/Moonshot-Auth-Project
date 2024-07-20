@@ -1,5 +1,5 @@
 "use client"
-import React, { FormEventHandler, useState } from 'react'
+import React, { FormEventHandler, useEffect, useState } from 'react'
 import {
     Card,
     CardContent,
@@ -13,6 +13,7 @@ import { Label } from "@/components/ui/label"
 import { Button } from './ui/button'
 import axios from 'axios'
 import { toast } from './ui/use-toast'
+import { useRouter } from 'next/navigation'
 
 export type UserData = {
     email: string;
@@ -29,7 +30,13 @@ const AuthForm = () => {
         name: "",
         password: ""
     });
-
+    const router = useRouter();
+    useEffect(()=>{
+        const token = localStorage.getItem("token");
+        if(token){
+            router.push("/category")
+        }
+    })
     const RegisterUser = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         if (formData.password.length < 8)
@@ -46,11 +53,13 @@ const AuthForm = () => {
                         password: formData.password,
                         name: formData.name
                     }).then(res => {
-                        console.log(res.data.message);
+                        console.log(res.data);
                         if (res.data.message === "success") {
+                            localStorage.setItem("token",res.data.token)
                             toast({
                                 title: "User registered Successfully"
                             })
+                            router.push("/verifyuser")
                         }
 
                         else
@@ -89,9 +98,11 @@ const AuthForm = () => {
                         .then(res => {
                             console.log(res.data)
                             if (res.data.auth) {
+                                localStorage.setItem("token",res.data.token)
                                 toast({
                                     title: "User successfully logged In "
                                 })
+                                router.push("/category")
                             }
                             else {
                                 toast({

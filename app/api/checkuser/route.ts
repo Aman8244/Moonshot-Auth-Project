@@ -14,7 +14,7 @@ export async function GET(req: NextRequest) {
     const response = await checkuser?.email
     if(response){
         return NextResponse.json({
-            userExists: true
+            userExists: true,
         })
     }
     return NextResponse.json({

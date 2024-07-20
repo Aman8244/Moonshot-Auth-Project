@@ -10,9 +10,12 @@ datasource db {
 model user {
   id    Int     @id @default(autoincrement())
   email String  @unique
-  name  String?
+  name  String
   selectedCategory categories[] 
   password String
+  otp String?
+  otpExpiresAt String?
+  verified Boolean @default(false)
 }
 
 model categories {
