@@ -12,4 +12,3 @@ const Seeding = async () => {
     })
 }
 
-Seeding();
