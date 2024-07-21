@@ -6,20 +6,19 @@ datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
-
-model user {
-  id    Int     @id @default(autoincrement())
-  email String  @unique
-  name  String
-  selectedCategory categories[] 
-  password String
-  otp String?   
-  verified Boolean @default(false)
+model User {
+  id               Int          @id @default(autoincrement())
+  email            String       @unique
+  name             String
+  password         String
+  otp              String?
+  verified         Boolean      @default(false)
+  categories       Category[]   @relation("UserCategories") 
 }
 
-model categories {
-  id        Int      @id @default(autoincrement())
-  title     String
-  author    user?    @relation(fields: [authorId], references: [id])
-  authorId  Int?
+model Category {
+  id               Int          @id @default(autoincrement())
+  title            String
+  users            User[]       @relation("UserCategories") 
 }
+

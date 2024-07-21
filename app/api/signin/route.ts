@@ -13,7 +13,7 @@ export async function POST(req:NextRequest) {
     let res:boolean = false
     const result = await bcryptjs.compare(password,response?.password)
     if(result===true){
-        const token = await generateToken({email:email})
+        const token = await generateToken({email:email,id:response?.id!})
         console.log(token)
         return NextResponse.json({
             auth:true,

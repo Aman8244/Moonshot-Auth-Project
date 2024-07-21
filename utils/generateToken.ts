@@ -1,6 +1,6 @@
 import jwt from "jsonwebtoken"
 
-export default async function generateToken(user:{email:string}) {
+export default async function generateToken(user:{email:string,id:number}) {
     const secretKey = process.env.Secret_key!;
-    return jwt.sign(user,secretKey,{ expiresIn: '24h' });
+    return jwt.sign(user,secretKey);
 }

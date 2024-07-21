@@ -106,7 +106,7 @@ const AuthForm = () => {
                         toast({
                             title: "User successfully logged In "
                         })
-                        router.push("/category")
+                        router.push("/category?page=1")
                     }
                     else {
                         toast({

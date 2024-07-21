@@ -10,7 +10,8 @@ export async function POST(req: NextRequest) {
     const data: UserData = await req.json();
     console.log(data);
     const salt = parseInt(process.env.Salt_Round!);
-    const otp = generateOTP(8)
+    const otp = generateOTP(8);
+    let token
     try {
         const transporter = nodemailer.createTransport({
             host: "smtp.gmail.com",
@@ -42,12 +43,12 @@ export async function POST(req: NextRequest) {
                     otp: otp
                 }
             })
-
+             token = await generateToken({ email: data.email ,id:createUser.id})
+            console.log(token)
+            await transporter.sendMail(mailOptions);
+           
 
         })
-        const token = await generateToken({ email: data.email })
-        console.log(token)
-        await transporter.sendMail(mailOptions);
         return NextResponse.json({
             message: "success",
             token

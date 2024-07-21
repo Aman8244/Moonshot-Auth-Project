@@ -32,7 +32,7 @@ const VerifyUser = () => {
         }).then(res=>{
             console.log(res.data)
             if(res.data.auth){
-                router.push("/category")
+                router.push("/category?page=1")
             }
             else{
                 setWarning("Wrong OTP please try again")
