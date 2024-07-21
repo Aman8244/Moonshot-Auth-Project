@@ -11,7 +11,6 @@ export async function POST(req: NextRequest) {
     console.log(data);
     const salt = parseInt(process.env.Salt_Round!);
     const otp = generateOTP(8);
-    let token
     try {
         const transporter = nodemailer.createTransport({
             host: "smtp.gmail.com",
@@ -29,26 +28,18 @@ export async function POST(req: NextRequest) {
             subject: 'Welcome To ECOMMERCE',
             text: `To Confirm Your Email Here is your Otp \n OTP - ${otp}`,
         };
-        await bcryptjs.hash(data.password, salt, async (err: Error | null, hash: string) => {
-            if (err) {
-                return NextResponse.json({
-                    message: "Failed Internal Error"
-                })
+        const hash = await bcryptjs.hash(data.password, salt)
+        const createUser = await prisma.user.create({
+            data: {
+                name: data.name,
+                email: data.email,
+                password: hash,
+                otp: otp
             }
-            const createUser = await prisma.user.create({
-                data: {
-                    name: data.name,
-                    email: data.email,
-                    password: hash,
-                    otp: otp
-                }
-            })
-             token = await generateToken({ email: data.email ,id:createUser.id})
-            console.log(token)
-            await transporter.sendMail(mailOptions);
-           
-
         })
+        const token = await generateToken({ email: data.email, id: createUser.id })
+        console.log(token)
+        await transporter.sendMail(mailOptions);
         return NextResponse.json({
             message: "success",
             token
@@ -60,6 +51,6 @@ export async function POST(req: NextRequest) {
             message: "Failed Internal Error1"
         })
     }
-    
+
 
 }

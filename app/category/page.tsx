@@ -14,6 +14,7 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from "@/components/ui/pagination"
+import { Button } from '@/components/ui/button'
 
 interface Categories {
   id: number;
@@ -82,7 +83,7 @@ const Category = () => {
         categories: (prevUser?.categories || []).filter(cat => cat.id !== id)
       }));
     }
-    
+
   }
   const isChecked = (categoryId: number) => {
     return user?.categories.some(cat => cat.id === categoryId) || false;
@@ -95,11 +96,19 @@ const Category = () => {
         <Navbar />
       </header>
       <section>
-        <div>
-          <button onClick={() => {
-            localStorage.removeItem("token");
-            router.push("/")
-          }}>Logout</button>
+        <div className='flex flex-row my-2'>
+          <div className='w-4/5 md:w-11/12'>
+            <h1 className='text-xl font-semibold px-4'>
+              Hi {user && user.name} !!
+            </h1>
+          </div>
+          <div>
+            <Button onClick={() => {
+              localStorage.removeItem("token");
+              router.push("/")
+            }}>Logout</Button>
+          </div>
+
         </div>
       </section>
       <section>
@@ -126,7 +135,7 @@ const Category = () => {
                       return <div>
                         <div className='flex space-x-3 my-2'>
                           <input type='checkbox' onChange={(e) => updateCategory(e.target, el.id, el.title)} id={`${el.id}`}
-                               checked={isChecked(el.id)}
+                            checked={isChecked(el.id)}
                           />
 
                           <label htmlFor={`${el.id}`}>{el.title}</label>
