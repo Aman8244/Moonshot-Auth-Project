@@ -1,7 +1,6 @@
 "use client"
 import Navbar from '@/components/Navbar'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
-import { Checkbox } from '@/components/ui/checkbox'
 import axios from 'axios'
 import { useRouter, useSearchParams } from 'next/navigation'
 import React, { useEffect, useState } from 'react'
@@ -44,10 +43,8 @@ const Category = () => {
         }
       }).then(res => {
         setUser(res.data.user)
-        console.log(res.data.user)
       })
       await axios.get(`/api/categories?page=${pageNo}`).then(res => {
-        console.log(res.data)
         setCategories(res.data.categories)
       })
 
@@ -72,7 +69,6 @@ const Category = () => {
       }));
     }
     else {
-      console.log("here")
       await axios.delete(`/api/categories?id=${id}`, {
         headers: {
           Authorization: `Bearer ${token}`

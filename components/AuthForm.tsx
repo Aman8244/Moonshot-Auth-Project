@@ -1,5 +1,5 @@
 "use client"
-import React, { FormEventHandler, useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import {
     Card,
     CardContent,
@@ -14,7 +14,6 @@ import { Button } from './ui/button'
 import axios from 'axios'
 import { toast } from './ui/use-toast'
 import { useRouter } from 'next/navigation'
-import generateOTP from '@/utils/generateOTP'
 
 export type UserData = {
     email: string;
@@ -48,7 +47,6 @@ const AuthForm = () => {
             await axios.get(`/api/checkuser?email=${formData.email}`).then(async (res) => {
                 if (res.data.userExists) {
                     setWarning("Email is already been taken please log in !");
-                    console.log(res.data)
                 }
                 else {
                     const res = await axios.post("/api/signup", {

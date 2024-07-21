@@ -1,10 +1,12 @@
 import prisma from "@/lib/prisma";
 import { NextRequest, NextResponse } from "next/server";
 import { UserData } from "@/components/AuthForm";
-import bcryptjs from "bcryptjs";
 import generateToken from "@/utils/generateToken";
 import generateOTP from "@/utils/generateOTP";
-import nodemailer from 'nodemailer';
+
+const bcryptjs = require("bcryptjs")
+const nodemailer = require("nodemailer")
+
 
 export async function POST(req: NextRequest) {
     const data: UserData = await req.json();

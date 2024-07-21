@@ -1,7 +1,6 @@
-import jwt from "jsonwebtoken";
 import { NextApiHandler, NextApiRequest, NextApiResponse } from "next";
 import { NextResponse } from "next/server";
-
+const jwt = require("jsonwebtoken")
 export default async function VerifyToken(handler: NextApiHandler) {
     return async (req: NextApiRequest,res:NextApiResponse) => {
         const token = req.headers.authorization?.split(' ')[1];

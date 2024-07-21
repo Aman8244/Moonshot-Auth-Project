@@ -1,6 +1,8 @@
 import prisma from "@/lib/prisma";
 import { NextRequest, NextResponse } from "next/server";
-import jwt from "jsonwebtoken"
+
+const jwt = require("jsonwebtoken")
+
 export async function GET(req: NextRequest) {
     const page = req.nextUrl.searchParams.get("page");
     const pageNo = page ? parseInt(page) : 1
